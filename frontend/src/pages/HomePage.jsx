@@ -19,9 +19,9 @@ const HomePage = () => {
         const response = await api.get("/notes/");
         const data = response.data;
         setNotes(data);
+        console.log(data);
         setRateLimit(false);
         setIsloading(false);
-        console.log(data);
       } catch (error) {
         if (error.response?.status === 429) {
           setRateLimit(true);
@@ -45,13 +45,19 @@ const HomePage = () => {
           <div className="text-center text-primary py-10">loading ... </div>
         )}
 
-        {notes.length > 0 && !ratelimit && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {notes.map((note) => (
-              <NoteCard key={note.id} note={note} setNotes={setNotes} />
-            ))}
-            {notes.length === 0 && !ratelimit && <NotesNotFound />}
-          </div>
+        {!ratelimit && (
+          <>
+            {notes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {notes.map((note) => (
+                  <NoteCard key={note._id} note={note} setNotes={setNotes} />
+                ))}
+              </div>
+            ) : (
+              !isloading && <NotesNotFound />
+            )}
+              
+          </>
         )}
       </div>
     </div>
