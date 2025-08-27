@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
@@ -6,6 +5,7 @@ import { LoaderIcon } from "lucide-react";
 import { Link } from "react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import { Trash2Icon } from "lucide-react";
+import api from "../lib/api";
 const NoteDetailsPage = () => {
   const [note, setNote] = useState(null);
   const [isloading, setIsloading] = useState(true);
@@ -15,8 +15,8 @@ const NoteDetailsPage = () => {
   useEffect(() => {
     const Fetchdata = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5001/api/notes/${id}`
+        const response = await api.get(
+          `/notes/${id}`
         );
         if (response.status === 200) {
           setNote(response.data);
@@ -41,8 +41,8 @@ const NoteDetailsPage = () => {
   const handleDelete = async () => {
     if (!window.confirm("Are You Sure You Want To Delete this Note?")) return;
     try {
-      const response = await axios.delete(
-        `http://localhost:5001/api/notes/${note._id}`
+      const response = await api.delete(
+        `/notes/${note._id}`
       );
       if (response.status === 200) {
         toast.success("Note deleted Successfully");
@@ -60,8 +60,8 @@ const NoteDetailsPage = () => {
     }
     setSaving(true);
     try {
-      const response = await axios.patch(
-        `http://localhost:5001/api/notes/${id}`,
+      const response = await api.patch(
+        `/notes/${id}`,
         note
       );
       if (response.status === 200) {
